@@ -1,0 +1,63 @@
+{% extends 'main.html' %}
+{% block content %}
+    <h1 style="text-align: center;"><img src = "{{url_for('static',filename='images/icon.png')}}" width=100> Outfit Color Calculator</h1>
+    <form style="text-align: center;" action="#">
+        <label for="color">Choose Your Main Color :</label>
+        <select name="color" id="color1">
+            <option value="pinkred">Pink</option>
+            <option value="pinkred">Red</option>
+            <option value="orange">Orange</option>
+            <option value="beige">Beige</option>
+            <option value="yllw">Yellow</option>
+            <option value="green">Green</option>
+            <option value="lb">Light Blue</option>
+            <option value="db">Dark Blue</option>
+            <option value="purple">Purple</option>
+            <option value="brwn">Brown</option>
+            <option value="grey">Grey</option>
+        </select><br/><br/>
+        <button type="button" onclick="clrfit()">Check</button>
+        <br/><br/>You may want to pair it with these colors : <br/><br/>
+        <p><img id="myImg" src="compman.png" width="350"></p>
+    </form>
+    
+
+<script>
+function clrfit() {
+    var x = document.getElementById("color1");
+    var fit = ""
+
+  if(x.value=="pinkred"){
+    fit = "{{url_for('static',filename='images/pinkred.png')}}"
+  }
+  else if(x.value=="beige"){
+    fit = "{{url_for('static',filename='images/beige.png')}}"
+  }
+  else if(x.value=="brwn"){
+    fit = "{{url_for('static',filename='images/brwn.png')}}"
+  }
+  else if(x.value=="db"){
+    fit = "{{url_for('static',filename='images/db.png')}}"
+  }
+  else if(x.value=="green"){
+    fit = "{{url_for('static',filename='images/green.png')}}"
+  }
+  else if(x.value=="grey"){
+    fit = "{{url_for('static',filename='images/grey.png')}}"
+  }
+  else if(x.value=="lb"){
+    fit = "{{url_for('static',filename='images/lb.png')}}"
+  }
+  else if(x.value=="orange"){
+    fit = "{{url_for('static',filename='images/orange.png')}}"
+  }
+  else if(x.value=="purple"){
+    fit = "{{url_for('static',filename='images/purple.png')}}"
+  }
+  else if(x.value=="yllw"){
+    fit = "{{url_for('static',filename='images/yllw.png')}}"
+  }
+  document.getElementById("myImg").src = fit;
+}
+</script>
+{% endblock %}
