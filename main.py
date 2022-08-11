@@ -115,6 +115,23 @@ def color():
             return render_template('colorcalc.html',colors=colors, img_src=img_src, sc = selected_color, color_img=color_img)
     return render_template('colorcalc.html',colors=colors, img_src=img_src)
 
-@app.route('/skintone')
+@app.route('/skintone',methods=['GET','POST'])
 def skin():
-    return render_template('skin.html')
+    #pilihan warna yang ada, untuk bagian <select> di html
+    skin = ['','Fair','Warm','Beige','Honey','Brown','Dark']
+    
+    #img_src dan selected_color dibuat kosong, untuk dipakai di if condition di file html
+    img_src= ''
+    selected_skin = ''
+
+    #post form yang berisi dropdown dan button
+    if request.method == 'POST':
+        #get warna kulit yang dipilih user
+        selected_skin = request.form.get('selected_skin')
+        
+        if selected_skin!='': #jika user sudah memilih warna
+            #url gambar pasangan warna
+            img_src = 'images/skin/'+str(selected_skin).lower()+'-pair.jpeg'
+
+            return render_template('skin.html',skin=skin, img_src=img_src, sk = selected_skin)
+    return render_template('skin.html',skin=skin, img_src=img_src)
