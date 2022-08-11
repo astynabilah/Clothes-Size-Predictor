@@ -1,0 +1,12 @@
+{% extends 'main.html' %}
+{% block content %}
+    <h1 style="text-align: center;"><img src = "{{url_for('static',filename='images/icon.png')}}" width=100> What'sMySize?</h1>
+    <form class ="form-group" style="text-align: center;" method="POST">
+        <p> Your Age    :   <input type=text name="age"><br/></p>
+        <p> Your Height :   <input type=text name="height"><br/></p>
+        <p> Your Weight :   <input type=text name="weight"><br/></p>
+        <button type=submit class="btnContact">Predict My Size</button><br/><br/>
+        Your Size is    : <br/> {{ pred_text }}
+   </form>
+    
+{% endblock %}
