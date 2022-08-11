@@ -3,6 +3,9 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
+from wtforms import validators
+from wtforms import SelectField, SubmitField, StringField
+from flask_wtf import FlaskForm
 
 class SizePrediction():
     #training function, runs only once when user open the Size Predictor page
@@ -63,14 +66,10 @@ class SizePrediction():
         elif pred_res == 7:
             return "XXXL"
 
-#bagian ini dimasukkan ke fungsi untuk menampilkan halaman Clothes Size Prediction
-SP = SizePrediction()
-SP.training()
-prediction_result = SP.predict(22,170,69)
-#----------------------------------------------------------------------------------
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = "mysecretkey"
 
 @app.route('/')
 def main():
@@ -80,18 +79,41 @@ def main():
 def size():
     global pred
     pred = ""
+    SP = SizePrediction()
+    SP.training()
     if request.method == 'POST':
         age = request.form['age']
         weight = request.form['weight']
         height = request.form['height']
-        pred = SP.predict(np.array([float(age), float(height), float(weight)]))
+        pred = SP.predict(float(age), float(height), float(weight))
         print(pred)
         return render_template('sizepred.html',pred_text=pred)
     return render_template('sizepred.html',pred_text=pred)
 
-@app.route('/colorcalc')
+@app.route('/colorcalc', methods=['GET','POST'])
 def color():
-    return render_template('colorcalc.html')
+    #pilihan warna yang ada, untuk bagian <select> di html
+    colors = ['','Pink','Red','Orange','Beige','Yellow','Green','Light Blue','Dark Blue','Purple','Brown','Grey']
+    
+    #img_src dan selected_color dibuat kosong, untuk dipakai di if condition di file html
+    img_src= ''
+    selected_color = ''
+
+    #post form yang berisi dropdown dan button
+    if request.method == 'POST':
+        #get warna yang dipilih user
+        selected_color = request.form.get('selected_color')
+        
+        if selected_color!='': #jika user sudah memilih warna
+            #url gambar yang dipilih user
+            color_img = 'images/colors/'+str(selected_color).lower()+'.png'
+            color_img = color_img.replace(' ','_') #menghilangkan spasi yang ada di Light Blue dan Dark Blue (sesuai nama file gambarnya juga)
+            
+            #url gambar pasangan warna
+            img_src = 'images/colors/'+str(selected_color).lower()+'-pair.png'
+            img_src = img_src.replace(' ','_') #menghilangkan spasi yang ada di Light Blue dan Dark Blue (sesuai nama file gambarnya juga)
+            return render_template('colorcalc.html',colors=colors, img_src=img_src, sc = selected_color, color_img=color_img)
+    return render_template('colorcalc.html',colors=colors, img_src=img_src)
 
 @app.route('/skintone')
 def skin():
