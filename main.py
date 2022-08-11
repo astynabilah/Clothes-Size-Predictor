@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
@@ -67,3 +68,31 @@ SP = SizePrediction()
 SP.training()
 prediction_result = SP.predict(22,170,69)
 #----------------------------------------------------------------------------------
+from flask import Flask, render_template, request
+
+app = Flask(__name__)
+
+@app.route('/')
+def main():
+    return render_template('home.html')
+
+@app.route('/sizepred',methods=['GET', 'POST'])
+def size():
+    global pred
+    pred = ""
+    if request.method == 'POST':
+        age = request.form['age']
+        weight = request.form['weight']
+        height = request.form['height']
+        pred = SP.predict(np.array([float(age), float(height), float(weight)]))
+        print(pred)
+        return render_template('sizepred.html',pred_text=pred)
+    return render_template('sizepred.html',pred_text=pred)
+
+@app.route('/colorcalc')
+def color():
+    return render_template('colorcalc.html')
+
+@app.route('/skintone')
+def skin():
+    return render_template('skin.html')
