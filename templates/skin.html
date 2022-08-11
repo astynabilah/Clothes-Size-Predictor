@@ -1,47 +1,26 @@
 {% extends 'main.html' %}
 {% block content %}
     <h1 style="text-align: center;"><img src = "{{url_for('static',filename='images/icon.png')}}" width=100> Outfit for My Skintone</h1>
-    <form style="text-align: center;" action="#">
-        <br/><br/><img src = "{{url_for('static',filename='images/skintone.png')}}" width=800><br/><br/>
-        <label for="skin">Choose your skintone :</label>
-        <select name="skin" id="skin">
-            <option value="fair">Fair</option>
-            <option value="warm">Warm</option>
-            <option value="beige">Beige</option>
-            <option value="honey">Honey</option>
-            <option value="brown">Brown</option>
-            <option value="dark">Dark</option>
-        </select><br/><br/>
-        <button type="button" onclick="skinfit()">Check</button>
+    <form style="text-align: center;", method="post">
+        <br/><img src = "{{url_for('static',filename='images/skintone.png')}}" width=600><br/><br/>
+        <label for="color">Choose Your Skintone :</label>
+      <!-- looping untuk menampilkan pilihan pada dropdown -->
+      <select name="selected_skin">
+        {% for s in skin %}
+        <option value="{{ s }}">{{ s }}</option>
+        {% endfor %}
+      </select>
+      <!-- submit button -->
+      <button type="submit" class="btn btn-default btn-primary">Check</button>
+      <!-- jika user sudah memilih warna kulit, menampilkan warna tersebut (disimpan di variabel sk)-->
+      {% if sk!= '' %}
+        <!-- menampilkan warna kulit tersebut, urlnya disimpan di variabel skin_img -->
+        <p>You chose {{sk}}
+      {%endif%}
+      <!-- menampilkan pasangan dari warna, url nya disimpan di variabel img_src-->
+      {% if img_src!=''%}
         <br/><br/>These colors will suit you well! <br/><br/>
-        <p><img id="myImg" src="compman.png" width="350"></p>
+        <p><img src="{{url_for('static',filename=img_src)}}", height=100></p>
+      {%endif%}
     </form>
-    
-    
-<script>
-function skinfit() {
-    var x = document.getElementById("skin");
-    var fit = ""
-
-  if(x.value=="fair"){
-    fit = "{{url_for('static',filename='images/skinfair.png')}}"
-  }
-  else if(x.value=="warm"){
-    fit = "{{url_for('static',filename='images/skinwarm.png')}}"
-  }
-  else if(x.value=="beige"){
-    fit = "{{url_for('static',filename='images/skinbeige.png')}}"
-  }
-  else if(x.value=="honey"){
-    fit = "{{url_for('static',filename='images/skinhoney.png')}}"
-  }
-  else if(x.value=="brown"){
-    fit = "{{url_for('static',filename='images/skinbrown.png')}}"
-  }
-  else if(x.value=="dark"){
-    fit = "{{url_for('static',filename='images/skindark.png')}}"
-  }
-  document.getElementById("myImg").src = fit;
-}
-</script>
 {% endblock %}
