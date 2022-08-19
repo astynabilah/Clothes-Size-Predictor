@@ -1,4 +1,39 @@
 {% extends 'main.html' %}
 {% block content %}
 <h1 style="text-align: center;"><img src = "{{url_for('static',filename='images/icon.png')}}" width=100> Welcome !</h1>
+<br/>
+<br/>
+<h4 style="text-align: center;">Check our features here:</h4>
+<br/>
+<div class="container">
+    <div class="row">
+      <div class="col-sm">
+        <div class="card" style="width: 18rem;" href="{{url_for('size')}}">
+            <img class="card-img-top" src="{{url_for('static',filename='images/thumbnail/cloth-tag.jpg')}}">
+            <div class="card-body">
+              <p class="card-text">Clothes Size Prediction</p>
+              <a href="{{url_for('size')}}" class="stretched-link"></a>
+            </div>
+        </div>
+      </div>
+      <div class="col-sm">
+        <div class="card" style="width: 18rem;" href="{{url_for('color')}}">
+            <img class="card-img-top" src="{{url_for('static',filename='images/thumbnail/clothes.jpg')}}">
+            <div class="card-body">
+              <p class="card-text">Outfit Color Calculator</p>
+              <a href="{{url_for('color')}}" class="stretched-link"></a>
+            </div>
+        </div>
+      </div>
+      <div class="col-sm">
+        <div class="card" style="width: 18rem;" href="{{url_for('skin')}}">
+            <img class="card-img-top" src="{{url_for('static',filename='images/thumbnail/people.jpg')}}">
+            <div class="card-body">
+              <p class="card-text">Outfit For My Skintone</p>
+              <a href="{{url_for('skin')}}" class="stretched-link"></a>
+            </div>
+        </div>
+      </div>
+    </div>
+</div>
 {% endblock %}
