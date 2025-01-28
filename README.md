@@ -34,6 +34,7 @@ This is a Flask web application that uses a Machine Learning model to predict cl
 # Installation
 1. Clone or download the code
 2. Make sure you already have the libraries installed
-3. Activate environment by using `Scripts\activate`, make sure the cmd folder location is in the `Clothes-Size-Predictor\astyenv` folder
-4. Use command `set FLASK_APP=main.py`
-5. Use command `flask run`
+3. Run the file `train_model.py` to get pickle file
+4. Activate environment by using `Scripts\activate`, make sure the cmd folder location is in the `Clothes-Size-Predictor\astyenv` folder
+5. Use command `set FLASK_APP=main.py`
+6. Use command `flask run`
