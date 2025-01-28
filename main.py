@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
+import pickle
+import os
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
@@ -7,38 +9,28 @@ from wtforms import validators
 from wtforms import SelectField, SubmitField, StringField
 from flask_wtf import FlaskForm
 
-class SizePrediction():
-    #training function, runs only once when user open the Size Predictor page
-    def training(self):
-        #read csv file
-        df = pd.read_csv("clothes_size.csv")
+class SizePrediction:
+    def __init__(self):
+        self.model_file = "size_model.pkl"  # File pickle model
+        self.encode = {"size": {"XXS": 0, "XS": 1, "S": 2, "M": 3, "L": 4, "XL": 5, "XXL": 6, "XXXL": 7}}
+        self.model = self.load_model()  # Load model saat aplikasi Flask dimulai
 
-        #drop null values
-        df = df.dropna()
-
-        #change label
-        global encode
-        encode = {"size":{"XXS": 0, "XS": 1, "S":2, "M":3, "L":4, "XL":5, "XXL":6, "XXXL":7}}
-        df = df.replace(encode)
-
-        #split data, X (age, weight, height) is features, y is label
-        X = df.iloc[:,:-1]
-        y = df['size']
-        X_train, X_test, y_train, y_test = train_test_split(X,y,test_size = 0.3)
+    def load_model(self):
+        """Load model dari pickle file, tanpa training ulang."""
+        if os.path.exists(self.model_file):
+            with open(self.model_file, "rb") as file:
+                print("Model loaded successfully from pickle file.")
+                return pickle.load(file)
+        else:
+            print("Model file not found! Please run 'train_model.py' first.")
+            return None
         
-        #defining model
-        global rf_model 
-        rf_model = RandomForestClassifier()
-
-        #fitting train data
-        rf_model.fit(X_train,y_train)
-
-        #predicting test data
-        y_rf_pred = rf_model.predict(X_test)
-        # print(accuracy_score(y_test,y_rf_pred))
-
     #predict function, runs whenever user click 'Predict' button
     def predict(self, age, height, weight):
+
+        if self.model is None:
+            return "Model not available. Please run 'train_model.py' first."
+        
         #assigning parameters into dictionary
         d = {'weight':[weight], 'age': [age], 'height': [height]}
 
@@ -46,7 +38,7 @@ class SizePrediction():
         user_data = pd.DataFrame(data=d)
 
         #predict input from user
-        pred_res = rf_model.predict(user_data)[0]
+        pred_res = self.model.predict(user_data)[0]
 
         #return prediction result to be displayed on web using Flask
         if pred_res == 0:
@@ -80,7 +72,7 @@ def size():
     global pred
     pred = ""
     SP = SizePrediction()
-    SP.training()
+    # SP.training()
     if request.method == 'POST':
         age = request.form['age']
         weight = request.form['weight']
